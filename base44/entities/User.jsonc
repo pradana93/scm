@@ -1,0 +1,32 @@
+{
+  "properties": {
+    "role": {
+      "type": "string",
+      "description": "The role of the user in the app",
+      "enum": [
+        "super_admin",
+        "admin",
+        "user",
+        "public"
+      ],
+      "default": "user"
+    },
+    "display_name": {
+      "type": "string",
+      "description": "Custom editable display name shown across the app"
+    },
+    "job_title": {
+      "type": "string",
+      "description": "Fungsi kerja / jabatan pengguna"
+    },
+    "last_active_at": {
+      "type": "string",
+      "description": "Timestamp aktivitas terakhir pengguna untuk menentukan status kehadiran (Online/Away/Offline)"
+    }
+  },
+  "required": [
+    "role"
+  ],
+  "name": "User",
+  "type": "object"
+}
