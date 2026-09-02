@@ -69,11 +69,22 @@ CREATE TABLE public.vendors (
 
 ALTER TABLE public.vendors ENABLE ROW LEVEL SECURITY;
 
+-- Allow authenticated users to view vendors
 CREATE POLICY "Authenticated users can view vendors" ON public.vendors
   FOR SELECT USING (auth.role() = 'authenticated');
 
-CREATE POLICY "Authenticated users can manage vendors" ON public.vendors
-  FOR ALL USING (auth.role() = 'authenticated');
+-- Allow admins to manage vendors
+CREATE POLICY "Admins can manage vendors" ON public.vendors
+  FOR ALL USING (
+    EXISTS (
+      SELECT 1 FROM public.users 
+      WHERE id = auth.uid() AND role IN ('admin', 'super_admin')
+    )
+  );
+
+-- Allow initial setup (before admin role is set)
+CREATE POLICY "Enable insert for authentication" ON public.vendors
+  FOR INSERT WITH CHECK (true);
 
 -- ============================================
 -- 3. WAREHOUSES TABLE
@@ -93,11 +104,22 @@ CREATE TABLE public.warehouses (
 
 ALTER TABLE public.warehouses ENABLE ROW LEVEL SECURITY;
 
+-- Allow authenticated users to view warehouses
 CREATE POLICY "Authenticated users can view warehouses" ON public.warehouses
   FOR SELECT USING (auth.role() = 'authenticated');
 
-CREATE POLICY "Authenticated users can manage warehouses" ON public.warehouses
-  FOR ALL USING (auth.role() = 'authenticated');
+-- Allow admins to manage warehouses
+CREATE POLICY "Admins can manage warehouses" ON public.warehouses
+  FOR ALL USING (
+    EXISTS (
+      SELECT 1 FROM public.users 
+      WHERE id = auth.uid() AND role IN ('admin', 'super_admin')
+    )
+  );
+
+-- Allow initial setup (before admin role is set)
+CREATE POLICY "Enable insert for authentication" ON public.warehouses
+  FOR INSERT WITH CHECK (true);
 
 -- ============================================
 -- 4. OUTLETS TABLE
