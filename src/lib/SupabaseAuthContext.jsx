@@ -1,5 +1,23 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { supabase, getCurrentUser, signOut, signInWithEmail, signUpWithEmail, resetPassword } from '@/lib/supabaseClient';
+import { createClient } from '@supabase/supabase-js';
+
+// Initialize Supabase client with dynamic credentials
+const getSupabaseClient = () => {
+  const supabaseUrl = localStorage.getItem('supabase_url') || import.meta.env.VITE_SUPABASE_URL || '';
+  const supabaseAnonKey = localStorage.getItem('supabase_key') || import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+  
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return null;
+  }
+  
+  return createClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      autoRefreshToken: true,
+      persistSession: true,
+      detectSessionInUrl: true
+    }
+  });
+};
 
 const AuthContext = createContext();
 
@@ -9,13 +27,24 @@ export const AuthProvider = ({ children }) => {
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
   const [authError, setAuthError] = useState(null);
   const [authChecked, setAuthChecked] = useState(false);
+  const [supabase, setSupabase] = useState(null);
 
   useEffect(() => {
+    // Initialize Supabase client
+    const client = getSupabaseClient();
+    if (!client) {
+      setIsLoadingAuth(false);
+      setAuthChecked(true);
+      return;
+    }
+    
+    setSupabase(client);
+    
     // Check for existing session on mount
-    checkSession();
+    checkSession(client);
 
     // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+    const { data: { subscription } } = client.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_IN') {
         setUser(session.user);
         setIsAuthenticated(true);
@@ -40,12 +69,14 @@ export const AuthProvider = ({ children }) => {
     };
   }, []);
 
-  const checkSession = async () => {
+  const checkSession = async (client = supabase) => {
+    if (!client) return;
+    
     try {
       setIsLoadingAuth(true);
-      const currentUser = await getCurrentUser();
+      const { data: { user: currentUser }, error } = await client.auth.getUser();
       
-      if (currentUser) {
+      if (currentUser && !error) {
         setUser(currentUser);
         setIsAuthenticated(true);
         setAuthError(null);
@@ -65,9 +96,19 @@ export const AuthProvider = ({ children }) => {
   };
 
   const login = async (email, password) => {
+    if (!supabase) {
+      return { success: false, error: new Error('Supabase not configured') };
+    }
+    
     try {
       setAuthError(null);
-      const data = await signInWithEmail(email, password);
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+      
+      if (error) throw error;
+      
       setUser(data.user);
       setIsAuthenticated(true);
       return { success: true };
@@ -82,9 +123,19 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (email, password) => {
+    if (!supabase) {
+      return { success: false, error: new Error('Supabase not configured') };
+    }
+    
     try {
       setAuthError(null);
-      const data = await signUpWithEmail(email, password);
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password
+      });
+      
+      if (error) throw error;
+      
       setUser(data.user);
       setIsAuthenticated(true);
       return { success: true };
@@ -99,9 +150,18 @@ export const AuthProvider = ({ children }) => {
   };
 
   const forgotPassword = async (email) => {
+    if (!supabase) {
+      return { success: false, error: new Error('Supabase not configured') };
+    }
+    
     try {
       setAuthError(null);
-      await resetPassword(email);
+      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`
+      });
+      
+      if (error) throw error;
+      
       return { success: true };
     } catch (error) {
       console.error('Password reset failed:', error);
@@ -114,8 +174,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async (shouldRedirect = true) => {
+    if (!supabase) return;
+    
     try {
-      await signOut();
+      await supabase.auth.signOut();
       setUser(null);
       setIsAuthenticated(false);
       
