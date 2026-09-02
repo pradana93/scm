@@ -65,9 +65,23 @@ export default function SetupWizard({ onComplete }) {
     
     try {
       const supabase = createClient(credentials.supabaseUrl, credentials.supabaseKey);
+      
+      // Try to query app_settings table
       const { data, error } = await supabase.from('app_settings').select('count');
       
-      if (error && error.code !== 'PGRST116') {
+      if (error) {
+        // Check if it's a "table doesn't exist" error - this is expected on first run
+        if (error.message.includes('relation "public.app_settings" does not exist') || 
+            error.message.includes('Could not find the table') ||
+            error.code === 'PGRST116') {
+          // This is a new/empty database - that's OK for setup!
+          setConnectionValid(true);
+          setConnectionTested(true);
+          setSuccess('Connected successfully! (New database detected - tables will be created during setup)');
+          setIsLoading(false);
+          return;
+        }
+        // Any other error is a real problem
         throw new Error(error.message);
       }
       
@@ -77,7 +91,15 @@ export default function SetupWizard({ onComplete }) {
     } catch (err) {
       setConnectionValid(false);
       setConnectionTested(true);
-      setError(`Connection failed: ${err.message}`);
+      
+      let errorMessage = err.message;
+      if (err.message.includes('Invalid API key') || err.message.includes('JWT')) {
+        errorMessage = 'Invalid Supabase Anon Key. Please check your credentials.';
+      } else if (err.message.includes('Invalid URL') || err.message.includes('fetch')) {
+        errorMessage = 'Invalid Supabase URL or network error. Please check your connection.';
+      }
+      
+      setError(`Connection failed: ${errorMessage}`);
     } finally {
       setIsLoading(false);
     }
