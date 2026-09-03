@@ -167,15 +167,15 @@ export default function SetupWizard({ onComplete }) {
         if (updateError) console.warn('Could not update user metadata:', updateError);
       }
       
-      // Insert organization
+      // Insert organization (as a vendor record for now)
       const { data: orgResult, error: orgError } = await supabase
         .from('vendors')
         .insert({
           name: orgData.name,
-          code: orgData.code,
-          address: orgData.address,
-          phone: orgData.phone,
+          contact_person: adminData.fullName,
           email: orgData.email,
+          phone: orgData.phone,
+          address: orgData.address,
           is_active: true,
         })
         .select()
@@ -190,7 +190,6 @@ export default function SetupWizard({ onComplete }) {
           name: warehouseData.name,
           code: warehouseData.code,
           address: warehouseData.address,
-          vendor_id: orgResult.id,
           is_active: true,
         });
       
