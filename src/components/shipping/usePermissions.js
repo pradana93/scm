@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { dataClient as base44 } from "@/api/dataClient";
 import { useAuth } from "@/lib/AuthContext";
 import { isSuperAdmin } from "./shippingUtils";
 

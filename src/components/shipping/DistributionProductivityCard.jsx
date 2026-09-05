@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Gauge } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { dataClient as base44 } from "@/api/dataClient";
 import WarehouseSelect from "@/components/shipping/WarehouseSelect";
 import DateRangeBar from "@/components/shipping/DateRangeBar";
 import { ALL_WAREHOUSES } from "@/components/shipping/shippingUtils";

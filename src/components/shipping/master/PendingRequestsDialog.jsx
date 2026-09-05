@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Check, X, Mail, UserCircle } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { dataClient as base44 } from "@/api/dataClient";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function PendingRequestsDialog({ requests, onClose, onDone, canGrantSuper = false }) {

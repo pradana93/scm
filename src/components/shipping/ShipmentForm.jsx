@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Plus, Package } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { dataClient as base44 } from "@/api/dataClient";
 import { today, WAREHOUSES } from "./shippingUtils";
 
 const buildInitial = (warehouse, prefill) => ({

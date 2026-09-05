@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { dataClient as base44 } from "@/api/dataClient";
 import { ALL_WAREHOUSES } from "./shippingUtils";
 
 const norm = (s) => (s || "").trim().toLowerCase();

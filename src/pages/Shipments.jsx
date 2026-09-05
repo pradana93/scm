@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, Upload, ChevronDown, ChevronUp, Search } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { dataClient as base44 } from "@/api/dataClient";
 import ShipmentList from "@/components/shipping/ShipmentList";
 import DateRangeBar from "@/components/shipping/DateRangeBar";
 import WarehouseSelect from "@/components/shipping/WarehouseSelect";

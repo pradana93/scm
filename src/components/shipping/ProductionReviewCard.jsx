@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Factory, ClipboardList } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { dataClient as base44 } from "@/api/dataClient";
 import DateRangeBar from "@/components/shipping/DateRangeBar";
 import ProductionActualListDialog from "@/components/shipping/ProductionActualListDialog";
 import ProductionPlanListDialog from "@/components/shipping/ProductionPlanListDialog";

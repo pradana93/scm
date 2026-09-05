@@ -1,77 +1,112 @@
-# Base44 Project
+# SCM App
 
-Use this repository to run and edit the app locally, then publish changes back through Base44.
+Supply chain management app running on **React + Vite**, **Supabase** (database, auth, storage) and deployed on **Vercel**. There is no Base44 dependency.
 
-Any change pushed to the repo will also be reflected in the Base44 Builder.
+## Stack
 
-## Prerequisites
+| Concern | Technology |
+| --- | --- |
+| Frontend | React 18, Vite, Tailwind, shadcn/ui |
+| Data + Auth + Storage | Supabase |
+| Hosting | Vercel |
 
-1. Clone the repository using the project's Git URL.
-2. Navigate to the project directory.
-3. Install dependencies: `npm install`.
-4. Install the Base44 CLI: `npm install -g base44@latest`.
+## Local Development
 
-See the [Base44 CLI docs](https://docs.base44.com/developers/references/cli/get-started/overview) if you want to run Base44 commands directly.
+1. Install dependencies:
 
-## Run Locally
+   ```bash
+   npm install
+   ```
 
-Run the full local development environment from the project root:
+2. Create `.env.local` in the project root:
 
-```bash
-base44 dev
-```
+   ```env
+   VITE_SUPABASE_URL=https://your-project.supabase.co
+   VITE_SUPABASE_ANON_KEY=your-anon-public-key
+   ```
 
-`base44 dev` starts the local Base44 development backend and, when this app is configured for it, also starts the frontend dev server for you. Use the frontend URL printed by the command.
+3. Start the dev server:
 
-For example, when the Base44 project config includes a `serveCommand`, `base44 dev` can launch the frontend too:
+   ```bash
+   npm run dev
+   ```
 
-```json5
-{
-  "site": {
-    "serveCommand": "npm run dev"
-  }
-}
-```
+## Database Setup
 
-In a Base44 project this lives in `base44/config.jsonc`.
+Apply the schema in `supabase/migrations/002_scm_schema.sql`.
 
-## Run Only The Frontend
+**Option A — Supabase dashboard (simplest)**
 
-If you only want to work on the frontend against the hosted Base44 backend, run:
+1. Open your project → **SQL Editor** → **New query**.
+2. Paste the contents of `supabase/migrations/002_scm_schema.sql`.
+3. Click **Run**.
 
-```bash
-npm run dev
-```
-
-Open the local URL printed by Vite.
-
-## Use The Hosted Backend
-
-For frontend-only development, create or update `.env.local` in the project root:
+**Option B — Supabase CLI**
 
 ```bash
-VITE_BASE44_APP_ID=your_app_id
-VITE_BASE44_APP_BASE_URL=https://your-app.base44.app
+npm install -g supabase
+supabase login
+supabase link --project-ref <your-project-ref>
+supabase db push
 ```
 
-`VITE_BASE44_APP_ID` identifies the Base44 app.
+The migration creates all tables, `updated_date` triggers, role helper functions, row level security policies, the signup trigger that provisions a profile row, and the public `uploads` storage bucket.
 
-`VITE_BASE44_APP_BASE_URL` tells the Base44 Vite plugin where to send local `/api` requests. Point it at your deployed Base44 app URL when you want the local frontend to use the hosted backend.
+### Granting the first admin
 
-When you use `base44 dev`, the command injects the local Base44 values for you, so `.env.local` is mainly needed for frontend-only workflows.
+Every new signup gets the `public` role. Promote your own account once, from the SQL editor:
 
-## Publish Your Changes
+```sql
+update public.app_users
+set role = 'super_admin'
+where email = 'you@example.com';
+```
 
-After pushing your changes to git, open the Base44 dashboard and publish the app:
+## Deploying to Vercel
+
+1. Push this repository to GitHub.
+2. In Vercel, **Add New → Project** and import the repository.
+3. Vercel reads `vercel.json`, so build settings are detected automatically:
+   - Build command: `npm run build`
+   - Output directory: `dist`
+4. Add the environment variables under **Settings → Environment Variables**:
+
+   | Name | Value |
+   | --- | --- |
+   | `VITE_SUPABASE_URL` | your Supabase project URL |
+   | `VITE_SUPABASE_ANON_KEY` | your Supabase anon public key |
+
+5. Deploy.
+
+`vercel.json` includes an SPA rewrite so client-side routes such as `/pengiriman` resolve correctly on refresh.
+
+### Supabase auth redirect URLs
+
+In Supabase → **Authentication → URL Configuration**, set:
+
+- **Site URL**: your Vercel production URL
+- **Redirect URLs**: your Vercel URL plus `http://localhost:5173` for local development
+
+This makes password reset and OAuth redirects work in both environments.
+
+## Project Structure
+
+```
+src/
+  api/dataClient.js     # Supabase-backed data layer (entities, auth, storage, users)
+  lib/AuthContext.jsx   # Authentication + profile/role state
+  lib/supabaseClient.js # Supabase client
+  components/           # UI and feature components
+  pages/                # Routed pages
+supabase/migrations/    # Database schema
+vercel.json             # Vercel build + SPA rewrites
+```
+
+## Scripts
 
 ```bash
-base44 dashboard open
+npm run dev        # start dev server
+npm run build      # production build
+npm run preview    # preview the production build
+npm run lint       # lint
 ```
-
-## Docs & Support
-
-Documentation: [https://docs.base44.com/Integrations/Using-GitHub](https://docs.base44.com/Integrations/Using-GitHub)
-
-Base44 CLI command reference: [https://docs.base44.com/developers/references/cli/commands/introduction](https://docs.base44.com/developers/references/cli/commands/introduction)
-
-Support: [https://app.base44.com/support](https://app.base44.com/support)

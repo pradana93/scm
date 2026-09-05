@@ -1,14 +1,12 @@
-import { createClient } from '@base44/sdk';
-import { appParams } from '@/lib/app-params';
+/**
+ * Compatibility shim.
+ *
+ * The app previously imported `base44` from this module. The backend is now
+ * Supabase, so this re-exports the Supabase-backed data client under the same
+ * name and API surface. No Base44 SDK is involved.
+ */
+import { dataClient } from '@/api/dataClient';
 
-const { appId, token, functionsVersion, appBaseUrl } = appParams;
+export const base44 = dataClient;
 
-//Create a client with authentication required
-export const base44 = createClient({
-  appId,
-  token,
-  functionsVersion,
-  serverUrl: '',
-  requiresAuth: false,
-  appBaseUrl
-});
+export default base44;

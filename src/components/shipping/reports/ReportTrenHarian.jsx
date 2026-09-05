@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { BarChart3, Download } from "lucide-react";
 import * as XLSX from "xlsx";
-import { base44 } from "@/api/base44Client";
+import { dataClient as base44 } from "@/api/dataClient";
 import WarehouseSelect from "@/components/shipping/WarehouseSelect";
 import { today, ALL_WAREHOUSES } from "@/components/shipping/shippingUtils";
 

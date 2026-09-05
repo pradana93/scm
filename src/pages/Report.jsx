@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { dataClient as base44 } from "@/api/dataClient";
 import WarehouseSelect from "@/components/shipping/WarehouseSelect";
 import { useWarehouseFilter } from "@/components/shipping/WarehouseFilterContext";
 import ReportByStatus from "@/components/shipping/reports/ReportByStatus";

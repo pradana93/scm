@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ShieldCheck, Users, ChevronDown, Lock } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { dataClient as base44 } from "@/api/dataClient";
 import { useAuth } from "@/lib/AuthContext";
 import { isSuperAdmin } from "@/components/shipping/shippingUtils";
 import { usePermissions, PERMISSION_GROUPS } from "@/components/shipping/usePermissions";

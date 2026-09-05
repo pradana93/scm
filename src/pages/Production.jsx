@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, Factory, Pencil, Trash2, Play, ClipboardList, CheckCircle2, Snowflake, ShieldCheck } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { dataClient as base44 } from "@/api/dataClient";
 import { useAuth } from "@/lib/AuthContext";
 import { usePermissions } from "@/components/shipping/usePermissions";
 import ConfirmDeleteDialog from "@/components/shipping/master/ConfirmDeleteDialog";

@@ -1,9 +1,16 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Supabase configuration
-// These values should be set in your environment variables
+// Supabase configuration.
+// Local dev: .env.local  |  Production: Vercel project environment variables.
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error(
+    '[config] Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY. ' +
+      'Set them in .env.local (local) and in Vercel project settings (production).'
+  );
+}
 
 // Create Supabase client
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {

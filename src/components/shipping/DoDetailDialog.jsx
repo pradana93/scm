@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Download, Package, FileText, Loader2, Save, Printer, GripVertical, Upload, Trash2 } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { dataClient as base44 } from "@/api/dataClient";
 import { useAuth } from "@/lib/AuthContext";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";

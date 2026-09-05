@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Search, ChevronDown, X, Boxes } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { dataClient as base44 } from "@/api/dataClient";
 import { ALL_WAREHOUSES } from "./shippingUtils";
 import { Checkbox } from "@/components/ui/checkbox";
 

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Boxes, CircleCheck, Clock3, LoaderCircle, Target, Timer } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { dataClient as base44 } from "@/api/dataClient";
 import DateRangeBar from "@/components/shipping/DateRangeBar";
 import WarehouseSelect from "@/components/shipping/WarehouseSelect";
 import KomplainListDialog from "@/components/shipping/KomplainListDialog";

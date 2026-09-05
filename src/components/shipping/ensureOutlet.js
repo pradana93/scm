@@ -1,4 +1,4 @@
-import { base44 } from "@/api/base44Client";
+import { dataClient as base44 } from "@/api/dataClient";
 
 export const ensureOutlet = async (name) => {
   const trimmed = (name || "").trim();

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Loader2, Upload } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { dataClient as base44 } from "@/api/dataClient";
 import { formatTonnage } from "./shippingUtils";
 
 export default function ProcessConfirmDialog({ open, onClose, onSubmit, title, description, outletName, fields = [] }) {

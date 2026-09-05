@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { dataClient as base44 } from "@/api/dataClient";
 import { ALL_WAREHOUSES, formatTimestamp } from "./shippingUtils";
 
 const norm = (s) => (s || "").trim().toLowerCase();

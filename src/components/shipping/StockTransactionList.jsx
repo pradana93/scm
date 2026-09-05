@@ -4,7 +4,7 @@ import { Search, Pencil, Trash2, ArrowLeftRight, Trash } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { base44 } from "@/api/base44Client";
+import { dataClient as base44 } from "@/api/dataClient";
 import ConfirmDeleteDialog from "@/components/shipping/master/ConfirmDeleteDialog";
 import WarehouseSelect from "@/components/shipping/WarehouseSelect";
 import { ALL_WAREHOUSES, formatTimestamp } from "@/components/shipping/shippingUtils";

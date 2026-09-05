@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2, Users, UserCheck, Pencil, Check, X, Search } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { dataClient as base44 } from "@/api/dataClient";
 import { useAuth } from "@/lib/AuthContext";
 import { isSuperAdmin as isSuperAdminUser } from "@/components/shipping/shippingUtils";
 import { usePermissions } from "../usePermissions";

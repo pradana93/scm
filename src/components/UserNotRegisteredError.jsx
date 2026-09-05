@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { dataClient as base44 } from "@/api/dataClient";
 import { Loader2, Send, Mail } from "lucide-react";
 
 export default function UserNotRegisteredError() {

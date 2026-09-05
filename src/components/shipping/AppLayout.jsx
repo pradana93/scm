@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { NavLink, Outlet, Link } from "react-router-dom";
 import { LayoutDashboard, PackageCheck, Settings2, Truck, FileDown, ShieldCheck, LogOut, LogIn, UserCircle, Boxes, Factory, Inbox } from "lucide-react";
 import { useAuth } from "@/lib/AuthContext";
-import { base44 } from "@/api/base44Client";
+import { dataClient as base44 } from "@/api/dataClient";
 import { isSuperAdmin } from "./shippingUtils";
 import { usePermissions } from "./usePermissions";
 import { presenceStatus } from "./presenceUtils";

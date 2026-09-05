@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { dataClient as base44 } from "@/api/dataClient";
 
 export function useShipmentMutations() {
   const queryClient = useQueryClient();
